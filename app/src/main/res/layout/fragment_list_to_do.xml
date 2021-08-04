@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.todo.ui.list_todo.ListToDoViewModel" />
@@ -22,7 +23,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_todo" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_todo_fab"
@@ -31,9 +33,11 @@
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
             android:clickable="true"
+            android:contentDescription="@string/new_todo"
             android:focusable="true"
             android:src="@drawable/ic_baseline_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
