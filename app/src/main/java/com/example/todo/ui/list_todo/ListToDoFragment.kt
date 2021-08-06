@@ -1,16 +1,19 @@
 package com.example.todo.ui.list_todo
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.todo.R
+import androidx.navigation.fragment.findNavController
 import com.example.todo.databinding.FragmentListToDoBinding
+import com.example.todo.util.extensions.EventObserver
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListToDoFragment : Fragment() {
-    private val viewModel: ListToDoViewModel by viewModels()
+    private val listToDoViewModel: ListToDoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +25,20 @@ class ListToDoFragment : Fragment() {
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = viewModel
+            viewModel = listToDoViewModel
         }.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initNavigation()
+    }
+
+    private fun initNavigation() {
+        listToDoViewModel.newToDo.observe(viewLifecycleOwner, EventObserver {
+            val action = ListToDoFragmentDirections.actionListToDoFragmentToToDoFragment()
+            findNavController().navigate(action)
+        })
     }
 }

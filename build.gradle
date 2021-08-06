@@ -12,6 +12,7 @@ buildscript {
         firestore_version = "23.0.3"
         livedata_ktx_version = "2.3.1"
         timber_version = "4.7.1"
+        paging_version = "3.0.1"
     }
 
     repositories {
