@@ -10,6 +10,7 @@ interface IToDoRepository {
 
     fun fetchListToDo(): Flow<PagingData<ToDo>>
     suspend fun addToDo(title: String, desc: String, pictureUrl: String?): Result<Unit>
+    suspend fun fetchToDoById(id: String): Result<ToDo>
     suspend fun updateToDo(todo: ToDo): Result<Unit>
     suspend fun removeToDo(id: String): Result<Unit>
 }

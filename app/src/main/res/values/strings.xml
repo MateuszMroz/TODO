@@ -10,4 +10,6 @@
     <string name="retry">RETRY</string>
     <string name="remove_task_title">Remove the task</string>
     <string name="remove_task_question">Do you want to remove this task?</string>
+    <string name="todo_updated_success">The note was updated successfully.</string>
+    <string name="todo_save_success">The note was saved successfully.</string>
 </resources>

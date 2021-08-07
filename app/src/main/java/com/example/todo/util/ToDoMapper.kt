@@ -21,6 +21,14 @@ class ToDoMapper @Inject constructor() {
         )
     }
 
+    fun convertToSimpleHashMap(todo: ToDo): HashMap<String, Any?> {
+        return hashMapOf(
+            title to todo.title,
+            description to todo.description,
+            pictureUrl to todo.pictureUrl,
+        )
+    }
+
     fun convertToToDo(title: String, desc: String, pictureUrl: String?, time: Long): ToDo {
         return ToDo(
             title = title,

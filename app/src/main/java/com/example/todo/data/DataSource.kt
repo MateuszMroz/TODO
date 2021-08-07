@@ -50,6 +50,52 @@ class DataSource @Inject constructor(
         }
     }
 
+    suspend fun fetchToDoById(id: String): ToDo = withContext(coroutineContext) {
+        suspendCancellableCoroutine {
+            val dbCollection = db.collection(COLLECTION_NAME)
+            val todoRef = dbCollection
+                .whereEqualTo("id", id)
+
+            todoRef.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.documents?.get(0)
+                    val todo = result?.toObject(ToDo::class.java)
+
+                    if (todo != null) {
+                        it.resume(todo)
+                    } else {
+                        it.resumeWithException(Throwable())
+                    }
+                } else {
+                    it.resumeWithException(task.exception ?: Throwable())
+                }
+            }
+        }
+    }
+
+    suspend fun updateToDo(todo: ToDo): Unit = withContext(coroutineContext) {
+        suspendCancellableCoroutine {
+            val dbCollection = db.collection(COLLECTION_NAME)
+            val todoRef = dbCollection
+                .whereEqualTo("id", todo.id)
+
+            todoRef.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result?.firstOrNull()
+                    if (result != null) {
+                        dbCollection.document(result.id)
+                            .update(mapper.convertToSimpleHashMap(todo))
+                        it.resume(Unit)
+                    } else {
+                        it.resumeWithException(Throwable())
+                    }
+                } else {
+                    it.resumeWithException(task.exception ?: Throwable())
+                }
+            }
+        }
+    }
+
     suspend fun deleteToDo(id: String): Unit = withContext(coroutineContext) {
         suspendCancellableCoroutine {
             val dbCollection = db.collection(COLLECTION_NAME)
