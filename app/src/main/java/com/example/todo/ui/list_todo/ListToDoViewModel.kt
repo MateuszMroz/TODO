@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.example.todo.data.repository.IToDoRepository
 import com.example.todo.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,12 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
 
     private val _removeToDo = MutableLiveData<Event<String>>()
     val removeToDo: LiveData<Event<String>> = _removeToDo
+
+    private val _errorMsg = MutableLiveData<Event<String?>>()
+    val errorMsg: LiveData<Event<String?>> = _errorMsg
+
+    private val _successMsg = MutableLiveData<Event<String?>>()
+    val successMsg: LiveData<Event<String?>> = _successMsg
 
     val todos = repository.fetchListToDo()
         .cachedIn(viewModelScope)
@@ -38,7 +45,28 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
         return true
     }
 
-    fun onRefresh() {
-        TODO("Not yet implemented")
+    suspend fun onRemoveTask(id: String) {
+        viewModelScope.launch {
+            val result = repository.removeToDo(id)
+            if (result.isSuccess) {
+                onRefresh()
+            } else {
+                setErrorMsg(result.exceptionOrNull()?.message)
+            }
+        }
     }
+
+    fun onRefresh() {
+        repository.pagingSource?.invalidate()
+    }
+
+    fun setErrorMsg(message: String?) {
+        _errorMsg.value = Event(message)
+    }
+
+    fun setSuccessMsg(message: String?) {
+        _successMsg.value = Event(message)
+    }
+
+
 }

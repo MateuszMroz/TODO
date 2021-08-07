@@ -8,7 +8,13 @@ fun View.showSuccessSnackbar(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
 }
 
-fun View.showFailureSnackbar(message: String, actionMsg: String, onActionClick: () -> Unit) {
+fun View.showFailureSnackbar(message: String) {
+    Snackbar.make(this, message, Snackbar.LENGTH_LONG).apply {
+        setTextColor(Color.RED)
+    }.show()
+}
+
+fun View.showActionFailureSnackbar(message: String, actionMsg: String, onActionClick: () -> Unit) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).apply {
         setActionTextColor(Color.RED)
         setTextColor(Color.RED)

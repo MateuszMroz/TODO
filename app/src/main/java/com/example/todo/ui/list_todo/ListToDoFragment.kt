@@ -16,7 +16,10 @@ import com.example.todo.R
 import com.example.todo.databinding.FragmentListToDoBinding
 import com.example.todo.ui.list_todo.adapter.ToDoAdapter
 import com.example.todo.util.EventObserver
+import com.example.todo.util.extensions.showActionFailureSnackbar
+import com.example.todo.util.extensions.showDialog
 import com.example.todo.util.extensions.showFailureSnackbar
+import com.example.todo.util.extensions.showSuccessSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +54,25 @@ class ListToDoFragment : Fragment() {
         setupListAdapter()
         initAdapterStateListener()
         findToDos()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        listToDoViewModel.successMsg.observe(viewLifecycleOwner, EventObserver {
+            binding.root.apply {
+                showSuccessSnackbar(
+                    message = it ?: getString(R.string.something_went_wrong),
+                )
+            }
+        })
+
+        listToDoViewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
+            binding.root.apply {
+                showFailureSnackbar(
+                    message = it ?: getString(R.string.something_went_wrong),
+                )
+            }
+        })
     }
 
     private fun initNavigation() {
@@ -63,8 +85,16 @@ class ListToDoFragment : Fragment() {
             //open edit todo screen
         })
 
-        listToDoViewModel.removeToDo.observe(viewLifecycleOwner, EventObserver {
-            // remove todo dialog
+        listToDoViewModel.removeToDo.observe(viewLifecycleOwner, EventObserver { id ->
+            showDialog(
+                title = getString(R.string.remove_task_title),
+                subtitle = getString(R.string.remove_task_question),
+                onPositive = {
+                    lifecycleScope.launch {
+                        listToDoViewModel.onRemoveTask(id)
+                    }
+                }
+            )
         })
     }
 
@@ -105,8 +135,8 @@ class ListToDoFragment : Fragment() {
         }
         errorState?.let {
             binding.root.apply {
-                showFailureSnackbar(
-                    message = it.error.message ?: getString(R.string.somethining_went_wrong),
+                showActionFailureSnackbar(
+                    message = it.error.message ?: getString(R.string.something_went_wrong),
                     actionMsg = context.getString(R.string.retry)
                 ) {
                     listToDoViewModel.onRefresh()
