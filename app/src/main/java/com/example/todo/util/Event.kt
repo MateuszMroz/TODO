@@ -1,4 +1,4 @@
-package com.example.todo.util.extensions
+package com.example.todo.util
 
 import androidx.lifecycle.Observer
 

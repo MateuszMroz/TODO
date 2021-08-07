@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">ToDo</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="todo_avatar">ToDo Avatar</string>
     <string name="new_todo">New ToDo</string>
@@ -8,4 +7,6 @@
     <string name="description">Description</string>
     <string name="save">Save</string>
     <string name="picture_url">Picture URL</string>
+    <string name="somethining_went_wrong">Something went wrong.</string>
+    <string name="retry">RETRY</string>
 </resources>

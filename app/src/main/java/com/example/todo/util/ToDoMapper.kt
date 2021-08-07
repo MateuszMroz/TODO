@@ -1,4 +1,4 @@
-package com.example.todo.util.extensions
+package com.example.todo.util
 
 import com.example.todo.data.models.ToDo
 import java.util.*
