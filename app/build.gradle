@@ -60,10 +60,9 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$livedata_ktx_version"
 
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-
     implementation "com.google.firebase:firebase-firestore:$firestore_version"
-
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -80,4 +79,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     implementation "androidx.paging:paging-runtime:$paging_version"
+
+    implementation "io.coil-kt:coil:$coil_version"
 }

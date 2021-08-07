@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
             type="com.example.todo.data.models.ToDo" />
+
+        <variable
+            name="viewModel"
+            type="com.example.todo.ui.list_todo.ListToDoViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> viewModel.editToDo(item.id)}"
+        android:onLongClick="@{() -> viewModel.removeToDo(item.id)}"
+        app:cardCornerRadius="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="200dp">
 
             <ImageView
                 android:id="@+id/avatar_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/todo_avatar"
+                app:imageUrl="@{item.pictureUrl}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars"
-                android:contentDescription="@string/todo_avatar" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/title_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/normal_50"
-                android:layout_marginTop="@dimen/normal_50"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="@dimen/normal_50"
+                android:text="@{item.title}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/avatar_iv"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/avatar_iv"
                 tools:text="Title" />
 
             <TextView
                 android:id="@+id/description_tv"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="@dimen/normal_50"
                 android:layout_marginTop="@dimen/normal_50"
-                android:layout_marginEnd="@dimen/normal_50"
-                android:layout_marginBottom="@dimen/normal_50"
+                android:layout_marginBottom="8dp"
+                android:text="@{item.description}"
                 app:layout_constraintBottom_toTopOf="@+id/timestamp_tv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/avatar_iv"
+                app:layout_constraintEnd_toEndOf="@+id/title_tv"
+                app:layout_constraintStart_toStartOf="@+id/title_tv"
                 app:layout_constraintTop_toBottomOf="@+id/title_tv"
                 tools:text="Description" />
 
@@ -57,9 +69,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/normal_50"
-                android:layout_marginBottom="@dimen/normal_25"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/avatar_iv"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/description_tv"
+                app:timestamp="@{item.timestamp}"
                 tools:text="03.08.2021" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
