@@ -10,9 +10,14 @@ import com.example.todo.util.COLLECTION_NAME
 import com.example.todo.util.PAGE_SIZE
 import com.example.todo.util.ToDoMapper
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
@@ -35,6 +40,19 @@ class DataSource @Inject constructor(
                 pagingSource = it
             }
         }.flow
+    }
+
+    suspend fun realtimeUpdates() = callbackFlow<Boolean> {
+        val registration = db.collection(COLLECTION_NAME).addSnapshotListener { _, error ->
+            if(error == null) {
+                trySend(/*new data*/true)
+            } else {
+                Timber.e("ERROR_SNAPSHOT_LISTENER")
+                cancel(CancellationException())
+            }
+        }
+
+        awaitClose { registration.remove() }
     }
 
     suspend fun addToDO(todo: ToDo): Unit = withContext(coroutineContext) {

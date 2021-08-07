@@ -28,19 +28,9 @@ class ToDoViewModel @AssistedInject constructor(
 
     val isLoading = MutableLiveData(false)
 
-    val isValid = MediatorLiveData<Boolean>()
-
     private var todoEdit: ToDo? = null
 
     init {
-        isValid.addSource(title) {
-            isValid.value = !it.isNullOrEmpty()
-        }
-
-        isValid.addSource(description) {
-            isValid.value = !it.isNullOrEmpty()
-        }
-
         initProcess()
     }
 
