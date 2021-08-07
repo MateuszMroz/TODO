@@ -12,17 +12,19 @@ import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
+internal const val ORDER_FIELD = "time"
+
 class FirestorePagingSource @Inject constructor(private val db: FirebaseFirestore) :
     PagingSource<QuerySnapshot, ToDo>() {
 
     override fun getRefreshKey(state: PagingState<QuerySnapshot, ToDo>): QuerySnapshot? {
-        return null //?
+        return null
     }
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, ToDo> {
         return try {
             val currentPage = params.key ?: db.collection(COLLECTION_NAME)
-                .orderBy("time", Query.Direction.DESCENDING)
+                .orderBy(ORDER_FIELD, Query.Direction.DESCENDING)
                 .limit(PAGE_SIZE.toLong())
                 .get()
                 .await()
@@ -38,7 +40,7 @@ class FirestorePagingSource @Inject constructor(private val db: FirebaseFirestor
             val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
 
             val nextPage = db.collection(COLLECTION_NAME).limit(PAGE_SIZE.toLong())
-                .orderBy("time", Query.Direction.DESCENDING)
+                .orderBy(ORDER_FIELD, Query.Direction.DESCENDING)
                 .startAfter(lastDocumentSnapshot)
                 .get()
                 .await()

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.data.repository.IToDoRepository
-import com.example.todo.util.ToDoMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -14,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ToDoViewModel @Inject constructor(
     private val repository: IToDoRepository,
-    private val mapper: ToDoMapper
 ) : ViewModel() {
 
     val title = MutableLiveData<String>()
@@ -37,19 +35,14 @@ class ToDoViewModel @Inject constructor(
             isLoading.value = true
             runCatching {
                 repository.addToDo(
-                    mapper.convertToToDo(
-                        title.value!!,
-                        description.value!!,
-                        pictureUrl.value,
-                        System.currentTimeMillis()
-                    )
+                    title.value!!,
+                    description.value!!,
+                    pictureUrl.value,
                 )
             }.onSuccess {
                 isLoading.value = false
-                Timber.d("SUCCESS")
             }.onFailure {
                 isLoading.value = false
-                Timber.d("FAILURE")
             }
         }
     }
