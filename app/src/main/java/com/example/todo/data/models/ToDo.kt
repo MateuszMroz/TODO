@@ -5,7 +5,7 @@ import java.util.*
 
 data class ToDo(
     val id: String = UUID.randomUUID().toString(),
-    val title: String = "",
+    var title: String = "",
     @get: PropertyName("desc")
     @set: PropertyName("desc")
     var description: String = "",

@@ -67,6 +67,4 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
     fun setSuccessMsg(message: String?) {
         _successMsg.value = Event(message)
     }
-
-
 }

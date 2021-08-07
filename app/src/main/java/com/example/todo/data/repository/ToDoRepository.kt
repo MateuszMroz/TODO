@@ -33,8 +33,24 @@ class ToDoRepository @Inject constructor(
         }
     }
 
+    override suspend fun fetchToDoById(id: String): Result<ToDo> {
+        return runCatching { dataSource.fetchToDoById(id) }
+            .onSuccess {
+                Result.success(it)
+            }.onFailure {
+                Timber.e(it)
+                Result.failure<Throwable>(it)
+            }
+    }
+
     override suspend fun updateToDo(todo: ToDo): Result<Unit> {
-        TODO("Not yet implemented")
+        return runCatching { dataSource.updateToDo(todo) }
+            .onSuccess {
+                Result.success(it)
+            }.onFailure {
+                Timber.e(it)
+                Result.failure<Throwable>(it)
+            }
     }
 
     override suspend fun removeToDo(id: String): Result<Unit> {

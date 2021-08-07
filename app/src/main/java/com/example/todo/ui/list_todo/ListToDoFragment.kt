@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ListToDoFragment : Fragment() {
     private val listToDoViewModel: ListToDoViewModel by viewModels()
+
     private lateinit var listToDoAdapter: ToDoAdapter
     private lateinit var binding: FragmentListToDoBinding
 
@@ -82,7 +83,8 @@ class ListToDoFragment : Fragment() {
         })
 
         listToDoViewModel.editToDo.observe(viewLifecycleOwner, EventObserver {
-            //open edit todo screen
+            val action = ListToDoFragmentDirections.actionListToDoFragmentToToDoFragment(it)
+            findNavController().navigate(action)
         })
 
         listToDoViewModel.removeToDo.observe(viewLifecycleOwner, EventObserver { id ->

@@ -18,5 +18,11 @@
         android:id="@+id/toDoFragment"
         android:name="com.example.todo.ui.todo.ToDoFragment"
         android:label="Fragment ToDo"
-        tools:layout="@layout/fragment_to_do" />
+        tools:layout="@layout/fragment_to_do" >
+        <argument
+            android:name="todo_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>
