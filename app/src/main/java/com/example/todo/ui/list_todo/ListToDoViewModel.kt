@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.example.todo.data.repository.IToDoRepository
 import com.example.todo.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,10 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
 
     val todos = repository.fetchListToDo()
         .cachedIn(viewModelScope)
+
+    init {
+        realtimeUpdated()
+    }
 
     fun addNewToDo() {
         _newToDo.value = Event(Unit)
@@ -60,11 +65,19 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
         repository.pagingSource?.invalidate()
     }
 
-    fun setErrorMsg(message: String?) {
+    private fun realtimeUpdated() {
+        viewModelScope.launch {
+            repository.realtimeUpdates().collect {
+                onRefresh()
+            }
+        }
+    }
+
+    private fun setErrorMsg(message: String?) {
         _errorMsg.value = Event(message)
     }
 
-    fun setSuccessMsg(message: String?) {
+    private fun setSuccessMsg(message: String?) {
         _successMsg.value = Event(message)
     }
 }

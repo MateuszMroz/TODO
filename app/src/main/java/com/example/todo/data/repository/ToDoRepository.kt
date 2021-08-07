@@ -11,13 +11,17 @@ import javax.inject.Inject
 
 class ToDoRepository @Inject constructor(
     private val dataSource: DataSource,
-    private val mapper: ToDoMapper
+    private val mapper: ToDoMapper,
 ) : IToDoRepository {
     override val pagingSource: FirestorePagingSource?
         get() = dataSource.pagingSource
 
     override fun fetchListToDo(): Flow<PagingData<ToDo>> {
         return dataSource.fetchToDos()
+    }
+
+    override suspend fun realtimeUpdates(): Flow<Boolean> {
+        return dataSource.realtimeUpdates()
     }
 
     override suspend fun addToDo(title: String, desc: String, pictureUrl: String?): Result<Unit> {
