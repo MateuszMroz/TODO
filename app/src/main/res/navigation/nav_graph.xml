@@ -8,16 +8,20 @@
     <fragment
         android:id="@+id/listToDoFragment"
         android:name="com.example.todo.ui.list_todo.ListToDoFragment"
-        android:label="Fragment List ToDo"
+        android:label="Notes"
         tools:layout="@layout/fragment_list_to_do" >
         <action
             android:id="@+id/action_listToDoFragment_to_toDoFragment"
-            app:destination="@id/toDoFragment" />
+            app:destination="@id/toDoFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <fragment
         android:id="@+id/toDoFragment"
         android:name="com.example.todo.ui.todo.ToDoFragment"
-        android:label="Fragment ToDo"
+        android:label="New Note"
         tools:layout="@layout/fragment_to_do" >
         <argument
             android:name="todo_id"

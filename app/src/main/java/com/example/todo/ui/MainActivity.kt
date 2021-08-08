@@ -2,41 +2,47 @@ package com.example.todo.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.todo.R
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.todo.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val db = FirebaseFirestore.getInstance()
+    private var _binding: ActivityMainBinding? = null
+    private val binding
+        get() = _binding
+
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-//        findViewById<Button>(R.id.button).setOnClickListener {
-//            Log.d("4444_TAG", "onClick: ")
-//            val user = hashMapOf(
-//                "first" to "Ada",
-//                "last" to "Lovelace",
-//                "born" to 1815
-//            )
-//
-//            db.collection("users")
-//                .add(user)
-//                .addOnCompleteListener {
-//                    Log.d("4444_TAG", "onComplete")
-//                }
-//                .addOnSuccessListener { documentReference ->
-//                    Log.d("4444_TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
-//                }
-//                .addOnFailureListener { e ->
-//                    Log.w("4444_TAG", "Error adding document", e)
-//                }
-//                .addOnCanceledListener {
-//                    Log.d("4444_TAG", "onCanceled")
-//                }
-//        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        val appBarConfiguration = AppBarConfiguration(
+            topLevelDestinationIds = setOf(
+                R.id.listToDoFragment
+            ),
+            fallbackOnNavigateUpListener = ::onSupportNavigateUp
+        )
+        binding?.toolbar?.setupWithNavController(navController, appBarConfiguration)
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
