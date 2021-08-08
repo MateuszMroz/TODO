@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,6 +13,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todo.R
 import com.example.todo.databinding.FragmentListToDoBinding
+import com.example.todo.ui.BaseFragment
 import com.example.todo.ui.list_todo.adapter.ToDoAdapter
 import com.example.todo.util.EventObserver
 import com.example.todo.util.extensions.showActionFailureSnackbar
@@ -24,28 +24,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
-class ListToDoFragment : Fragment() {
+class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
     private val listToDoViewModel: ListToDoViewModel by viewModels()
 
     private lateinit var listToDoAdapter: ToDoAdapter
-    private lateinit var binding: FragmentListToDoBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentListToDoBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentListToDoBinding
+        get() = FragmentListToDoBinding::inflate
 
-        return binding.apply {
-            lifecycleOwner = viewLifecycleOwner
+    override fun setupViewModel() {
+        binding?.apply {
             viewModel = listToDoViewModel
-        }.root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +53,7 @@ class ListToDoFragment : Fragment() {
 
     private fun observeViewModel() {
         listToDoViewModel.successMsg.observe(viewLifecycleOwner, EventObserver {
-            binding.root.apply {
+            binding?.root?.apply {
                 showSuccessSnackbar(
                     message = it ?: getString(R.string.something_went_wrong),
                 )
@@ -68,7 +61,7 @@ class ListToDoFragment : Fragment() {
         })
 
         listToDoViewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
-            binding.root.apply {
+            binding?.root?.apply {
                 showFailureSnackbar(
                     message = it ?: getString(R.string.something_went_wrong),
                 )
@@ -110,7 +103,7 @@ class ListToDoFragment : Fragment() {
 
     private fun setupListAdapter() {
         listToDoAdapter = ToDoAdapter(listToDoViewModel)
-        binding.listTodoRv.apply {
+        binding?.listTodoRv?.apply {
             adapter = listToDoAdapter
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
@@ -120,8 +113,8 @@ class ListToDoFragment : Fragment() {
     private fun initAdapterStateListener() {
         lifecycleScope.launch {
             listToDoAdapter.loadStateFlow.collectLatest { loadStates ->
-                binding.loaderTodosPb.isVisible = loadStates.refresh is LoadState.Loading
-                binding.loaderNextItemsPb.isVisible = loadStates.append is LoadState.Loading
+                binding?.loaderTodosPb?.isVisible = loadStates.refresh is LoadState.Loading
+                binding?.loaderNextItemsPb?.isVisible = loadStates.append is LoadState.Loading
 
                 fetchError(loadStates)
             }
@@ -136,7 +129,7 @@ class ListToDoFragment : Fragment() {
             else -> null
         }
         errorState?.let {
-            binding.root.apply {
+            binding?.root?.apply {
                 showActionFailureSnackbar(
                     message = it.error.message ?: getString(R.string.something_went_wrong),
                     actionMsg = context.getString(R.string.retry)

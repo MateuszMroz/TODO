@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.todo.R
 import com.example.todo.databinding.FragmentToDoBinding
+import com.example.todo.ui.BaseFragment
 import com.example.todo.util.EventObserver
 import com.example.todo.util.extensions.showFailureSnackbar
 import com.example.todo.util.extensions.showSuccessSnackbar
@@ -16,9 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ToDoFragment : Fragment() {
+class ToDoFragment : BaseFragment<FragmentToDoBinding>() {
     private val navArgs: ToDoFragmentArgs by navArgs()
-    private lateinit var binding: FragmentToDoBinding
 
     @Inject
     lateinit var assistedFactory: ToDoViewModel.ToDoAssistedFactory
@@ -27,20 +26,13 @@ class ToDoFragment : Fragment() {
         ToDoViewModel.Factory(assistedFactory, navArgs.todoId)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentToDoBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentToDoBinding
+        get() = FragmentToDoBinding::inflate
 
-        return binding.apply {
-            lifecycleOwner = viewLifecycleOwner
+    override fun setupViewModel() {
+        binding?.apply {
             viewModel = todoViewModel
-        }.root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,7 +43,7 @@ class ToDoFragment : Fragment() {
 
     private fun observeViewModel() {
         todoViewModel.successMsg.observe(viewLifecycleOwner, EventObserver {
-            binding.root.apply {
+            binding?.root?.apply {
                 showSuccessSnackbar(
                     message = getString(it),
                 )
@@ -59,7 +51,7 @@ class ToDoFragment : Fragment() {
         })
 
         todoViewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
-            binding.root.apply {
+            binding?.root?.apply {
                 showFailureSnackbar(
                     message = it ?: getString(R.string.something_went_wrong),
                 )
