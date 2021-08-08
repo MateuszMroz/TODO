@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
@@ -47,7 +46,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
         initNavigation()
         setupListAdapter()
         initAdapterStateListener()
-        findToDos()
+        fetchToDos()
         observeViewModel()
     }
 
@@ -55,7 +54,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
         listToDoViewModel.successMsg.observe(viewLifecycleOwner, EventObserver {
             binding?.root?.apply {
                 showSuccessSnackbar(
-                    message = it ?: getString(R.string.something_went_wrong),
+                    message = getString(it),
                 )
             }
         })
@@ -93,7 +92,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
         })
     }
 
-    private fun findToDos() {
+    private fun fetchToDos() {
         lifecycleScope.launch {
             listToDoViewModel.todos.collect {
                 listToDoAdapter.submitData(it)
