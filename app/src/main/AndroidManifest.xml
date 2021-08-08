@@ -12,6 +12,7 @@
         android:theme="@style/Theme.ToDo">
         <activity
             android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

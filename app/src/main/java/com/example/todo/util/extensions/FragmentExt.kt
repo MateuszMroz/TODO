@@ -16,3 +16,7 @@ fun Fragment.showDialog(
         .setNegativeButton(android.R.string.cancel) { _, _ -> onNegative?.invoke() }
         .show()
 }
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}

@@ -1,6 +1,7 @@
 package com.example.todo
 
 import android.app.Application
+import com.example.todo.util.ReleaseTree
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -13,6 +14,10 @@ class ToDoApplication : Application() {
 
         FirebaseApp.initializeApp(this)
 
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(ReleaseTree())
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.example.todo.R
 import com.example.todo.databinding.FragmentToDoBinding
 import com.example.todo.ui.BaseFragment
 import com.example.todo.util.EventObserver
+import com.example.todo.util.extensions.hideKeyboard
 import com.example.todo.util.extensions.showFailureSnackbar
 import com.example.todo.util.extensions.showSuccessSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +40,11 @@ class ToDoFragment : BaseFragment<FragmentToDoBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         observeViewModel()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
     }
 
     private fun observeViewModel() {

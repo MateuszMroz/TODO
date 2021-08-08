@@ -46,7 +46,7 @@ class DataSource @Inject constructor(
     @ExperimentalCoroutinesApi
     suspend fun realtimeUpdates() = callbackFlow<Unit> {
         val registration = db.collection(COLLECTION_NAME).addSnapshotListener { _, error ->
-            if(error == null) {
+            if (error == null) {
                 trySend(Unit)
             } else {
                 Timber.e("ERROR_SNAPSHOT_LISTENER")
