@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
+import timber.log.Timber
 
-abstract class BaseFragment<VB : ViewBinding> : Fragment() {
-    private var _binding: VB? = null
-    protected val binding get() = _binding!!
+abstract class BaseFragment<VDB : ViewDataBinding> : Fragment() {
+    private var _binding: VDB? = null
+    protected val binding
+        get() = _binding
 
-    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VDB
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,18 +21,16 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = bindingInflater.invoke(inflater, container, false)
-        return binding.root
+        _binding?.apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupViewModel()
+
+        return binding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        observeViewModel()
-    }
-
-    abstract fun initView()
-
-    abstract fun observeViewModel()
+    abstract fun setupViewModel()
 
     override fun onDestroyView() {
         super.onDestroyView()
