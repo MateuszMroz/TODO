@@ -1,10 +1,12 @@
 package com.example.todo.ui.list_todo
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.example.todo.R
 import com.example.todo.data.repository.IToDoRepository
 import com.example.todo.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +29,10 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
     private val _errorMsg = MutableLiveData<Event<String?>>()
     val errorMsg: LiveData<Event<String?>> = _errorMsg
 
-    private val _successMsg = MutableLiveData<Event<String?>>()
-    val successMsg: LiveData<Event<String?>> = _successMsg
+    private val _successMsg = MutableLiveData<Event<Int>>()
+    val successMsg: LiveData<Event<Int>> = _successMsg
+
+    val isLoading = MutableLiveData(false)
 
     val todos = repository.fetchListToDo()
         .cachedIn(viewModelScope)
@@ -52,10 +56,14 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
 
     suspend fun onRemoveTask(id: String) {
         viewModelScope.launch {
+            isLoading.value = true
             val result = repository.removeToDo(id)
             if (result.isSuccess) {
+                isLoading.value = false
+                setSuccessMsg(R.string.note_removed_success)
                 onRefresh()
             } else {
+                isLoading.value = false
                 setErrorMsg(result.exceptionOrNull()?.message)
             }
         }
@@ -77,7 +85,7 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
         _errorMsg.value = Event(message)
     }
 
-    private fun setSuccessMsg(message: String?) {
-        _successMsg.value = Event(message)
+    private fun setSuccessMsg(@StringRes msgId: Int) {
+        _successMsg.value = Event(msgId)
     }
 }

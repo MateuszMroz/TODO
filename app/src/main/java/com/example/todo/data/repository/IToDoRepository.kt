@@ -9,8 +9,8 @@ interface IToDoRepository {
     val pagingSource: FirestorePagingSource?
 
     fun fetchListToDo(): Flow<PagingData<ToDo>>
-    suspend fun realtimeUpdates(): Flow<Boolean>
-    suspend fun addToDo(title: String, desc: String, pictureUrl: String?): Result<Unit>
+    suspend fun realtimeUpdates(): Flow<Unit>
+    suspend fun addToDo(todo: ToDo): Result<Unit>
     suspend fun fetchToDoById(id: String): Result<ToDo>
     suspend fun updateToDo(todo: ToDo): Result<Unit>
     suspend fun removeToDo(id: String): Result<Unit>

@@ -6,6 +6,7 @@ import com.example.todo.R
 import com.example.todo.data.models.ToDo
 import com.example.todo.data.repository.IToDoRepository
 import com.example.todo.util.Event
+import com.example.todo.util.ToDoMapper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class ToDoViewModel @AssistedInject constructor(
     private val repository: IToDoRepository,
+    private val mapper: ToDoMapper,
     @Assisted private val todoId: String?,
 ) : ViewModel() {
 
@@ -31,7 +33,7 @@ class ToDoViewModel @AssistedInject constructor(
     private var todoEdit: ToDo? = null
 
     init {
-        initProcess()
+        fetchToDo()
     }
 
     fun saveToDo() {
@@ -42,7 +44,7 @@ class ToDoViewModel @AssistedInject constructor(
         }
     }
 
-    private fun initProcess() {
+    fun fetchToDo() {
         if (todoId != null) {
             viewModelScope.launch {
                 isLoading.value = true
@@ -84,9 +86,12 @@ class ToDoViewModel @AssistedInject constructor(
         viewModelScope.launch {
             isLoading.value = true
             val result = repository.addToDo(
-                title.value!!,
-                description.value!!,
-                pictureUrl.value,
+                mapper.convertToToDo(
+                    title.value!!,
+                    description.value!!,
+                    pictureUrl.value,
+                    System.currentTimeMillis()
+                )
             )
 
             if (result.isSuccess) {

@@ -4,14 +4,13 @@ import androidx.paging.PagingData
 import com.example.todo.data.DataSource
 import com.example.todo.data.models.ToDo
 import com.example.todo.data.paging.FirestorePagingSource
-import com.example.todo.util.ToDoMapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class ToDoRepository @Inject constructor(
     private val dataSource: DataSource,
-    private val mapper: ToDoMapper,
 ) : IToDoRepository {
     override val pagingSource: FirestorePagingSource?
         get() = dataSource.pagingSource
@@ -20,20 +19,19 @@ class ToDoRepository @Inject constructor(
         return dataSource.fetchToDos()
     }
 
-    override suspend fun realtimeUpdates(): Flow<Boolean> {
+    @ExperimentalCoroutinesApi
+    override suspend fun realtimeUpdates(): Flow<Unit> {
         return dataSource.realtimeUpdates()
     }
 
-    override suspend fun addToDo(title: String, desc: String, pictureUrl: String?): Result<Unit> {
+    override suspend fun addToDo(todo: ToDo): Result<Unit> {
         return runCatching {
-            dataSource.addToDO(
-                mapper.convertToToDo(title, desc, pictureUrl, System.currentTimeMillis())
-            )
+            dataSource.addToDO(todo)
         }.onSuccess {
             Result.success(it)
         }.onFailure {
             Timber.e(it)
-            Result.failure<Throwable>(it)
+            Result.failure<Unit>(it)
         }
     }
 
@@ -43,7 +41,7 @@ class ToDoRepository @Inject constructor(
                 Result.success(it)
             }.onFailure {
                 Timber.e(it)
-                Result.failure<Throwable>(it)
+                Result.failure<ToDo>(it)
             }
     }
 
@@ -53,7 +51,7 @@ class ToDoRepository @Inject constructor(
                 Result.success(it)
             }.onFailure {
                 Timber.e(it)
-                Result.failure<Throwable>(it)
+                Result.failure<Unit>(it)
             }
     }
 
@@ -63,8 +61,7 @@ class ToDoRepository @Inject constructor(
                 Result.success(it)
             }.onFailure {
                 Timber.e(it)
-                Result.failure<Throwable>(it)
+                Result.failure<Unit>(it)
             }
     }
-
 }
