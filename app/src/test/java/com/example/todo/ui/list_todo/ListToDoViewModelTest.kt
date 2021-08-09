@@ -82,7 +82,6 @@ class ListToDoViewModelTest : BaseUnitTest() {
 
         listToDoViewModel = ListToDoViewModel(todoFakeRepository)
 
-        listToDoViewModel = ListToDoViewModel(todoFakeRepository)
         listToDoViewModel.onRemoveTask(todo1.id)
 
         val errorMsg: Event<String?> = listToDoViewModel.errorMsg.getOrAwaitValue()

@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
@@ -85,9 +84,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
                 title = getString(R.string.title_remove_task),
                 subtitle = getString(R.string.title_remove_task_question),
                 onPositive = {
-                    lifecycleScope.launch {
-                        listToDoViewModel.onRemoveTask(id)
-                    }
+                    listToDoViewModel.onRemoveTask(id)
                 }
             )
         })

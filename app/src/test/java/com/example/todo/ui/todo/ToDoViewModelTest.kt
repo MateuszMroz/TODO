@@ -9,6 +9,7 @@ import com.example.todo.util.ToDoMapper
 import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.After
@@ -38,6 +39,24 @@ class ToDoViewModelTest : BaseUnitTest() {
     @After
     fun tearDown() {
         todoFakeRepository.clearData()
+    }
+
+    @Test
+    fun `is open edit todo state`() {
+        todoViewModel = ToDoViewModel(todoFakeRepository, mapper, todo1.id)
+
+        assertThat(todoViewModel.title.getOrAwaitValue(), `is`(todo1.title))
+        assertThat(todoViewModel.description.getOrAwaitValue(), `is`(todo1.description))
+        assertThat(todoViewModel.pictureUrl.getOrAwaitValue(), `is`(todo1.pictureUrl))
+    }
+
+    @Test
+    fun `is open add new todo state`() {
+        todoViewModel = ToDoViewModel(todoFakeRepository, mapper, null)
+
+        assertThat(todoViewModel.title.value, nullValue())
+        assertThat(todoViewModel.description.value, nullValue())
+        assertThat(todoViewModel.pictureUrl.value, nullValue())
     }
 
     @Test
