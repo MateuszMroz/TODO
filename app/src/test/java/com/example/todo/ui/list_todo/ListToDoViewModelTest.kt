@@ -73,7 +73,7 @@ class ListToDoViewModelTest : BaseUnitTest() {
         listToDoViewModel.onRemoveTask(todo1.id)
 
         val successMsg: Event<Int> = listToDoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.note_removed_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_remove_success))
     }
 
     @Test

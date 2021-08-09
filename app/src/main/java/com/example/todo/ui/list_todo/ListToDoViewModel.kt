@@ -60,7 +60,7 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
             val result = repository.removeToDo(id)
             if (result.isSuccess) {
                 isLoading.value = false
-                setSuccessMsg(R.string.note_removed_success)
+                setSuccessMsg(R.string.msg_todo_remove_success)
                 onRefresh()
             } else {
                 isLoading.value = false

@@ -24,12 +24,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
     private val listToDoViewModel: ListToDoViewModel by viewModels()
 
-    private lateinit var listToDoAdapter: ToDoAdapter
+    private var listToDoAdapter: ToDoAdapter? = null
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentListToDoBinding
         get() = FragmentListToDoBinding::inflate
@@ -62,7 +63,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
         listToDoViewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
             binding?.root?.apply {
                 showFailureSnackbar(
-                    message = it ?: getString(R.string.something_went_wrong),
+                    message = it ?: getString(R.string.error_something_went_wrong),
                 )
             }
         })
@@ -81,8 +82,8 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
 
         listToDoViewModel.removeToDo.observe(viewLifecycleOwner, EventObserver { id ->
             showDialog(
-                title = getString(R.string.remove_task_title),
-                subtitle = getString(R.string.remove_task_question),
+                title = getString(R.string.title_remove_task),
+                subtitle = getString(R.string.title_remove_task_question),
                 onPositive = {
                     lifecycleScope.launch {
                         listToDoViewModel.onRemoveTask(id)
@@ -95,7 +96,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
     private fun fetchToDos() {
         lifecycleScope.launch {
             listToDoViewModel.todos.collect {
-                listToDoAdapter.submitData(it)
+                listToDoAdapter?.submitData(it)
             }
         }
     }
@@ -111,7 +112,7 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
 
     private fun initAdapterStateListener() {
         lifecycleScope.launch {
-            listToDoAdapter.loadStateFlow.collectLatest { loadStates ->
+            listToDoAdapter?.loadStateFlow?.collectLatest { loadStates ->
                 binding?.loaderTodosPb?.isVisible = loadStates.refresh is LoadState.Loading
                 binding?.loaderNextItemsPb?.isVisible = loadStates.append is LoadState.Loading
 
@@ -130,12 +131,22 @@ class ListToDoFragment : BaseFragment<FragmentListToDoBinding>() {
         errorState?.let {
             binding?.root?.apply {
                 showActionFailureSnackbar(
-                    message = it.error.message ?: getString(R.string.something_went_wrong),
-                    actionMsg = context.getString(R.string.retry)
+                    message = it.error.message ?: getString(R.string.error_something_went_wrong),
+                    actionMsg = context.getString(R.string.action_retry)
                 ) {
                     listToDoViewModel.onRefresh()
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        /**
+         * Prevent memory leak.
+         * Issue ->
+         *      https://stackoverflow.com/questions/35520946/leak-canary-recyclerview-leaking-madapter
+         * */
+        binding?.listTodoRv?.adapter = null
+        super.onDestroyView()
     }
 }

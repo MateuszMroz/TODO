@@ -51,7 +51,7 @@ class ToDoViewModelTest : BaseUnitTest() {
         todoViewModel.saveToDo()
 
         val successMsg: Event<Int> = todoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.todo_save_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_save_success))
     }
 
     @Test
@@ -103,7 +103,7 @@ class ToDoViewModelTest : BaseUnitTest() {
         todoViewModel.saveToDo()
 
         val successMsg: Event<Int> = todoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.todo_updated_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_updated_success))
     }
 
     @Test

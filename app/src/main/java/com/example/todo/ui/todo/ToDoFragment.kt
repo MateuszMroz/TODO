@@ -59,7 +59,7 @@ class ToDoFragment : BaseFragment<FragmentToDoBinding>() {
         todoViewModel.errorMsg.observe(viewLifecycleOwner, EventObserver {
             binding?.root?.apply {
                 showFailureSnackbar(
-                    message = it ?: getString(R.string.something_went_wrong),
+                    message = it ?: getString(R.string.error_something_went_wrong),
                 )
             }
         })

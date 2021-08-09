@@ -1,16 +1,22 @@
 <resources>
     <string name="app_name">ToDo</string>
-    <string name="todo_avatar">ToDo Avatar</string>
-    <string name="new_todo">New ToDo</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="save">Save</string>
-    <string name="picture_url">Picture URL</string>
-    <string name="something_went_wrong">Something went wrong.</string>
-    <string name="retry">RETRY</string>
-    <string name="remove_task_title">Remove the task</string>
-    <string name="remove_task_question">Do you want to remove this task?</string>
-    <string name="todo_updated_success">The note was updated successfully.</string>
-    <string name="todo_save_success">The note was saved successfully.</string>
-    <string name="note_removed_success">The note was removed sucessfully</string>
+
+    <string name="desc_todo_avatar">ToDo Avatar</string>
+    <string name="desc_new_todo">New ToDo</string>
+
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_picture_url">Picture URL</string>
+
+    <string name="error_something_went_wrong">Something went wrong.</string>
+
+    <string name="action_retry">RETRY</string>
+    <string name="action_save">Save</string>
+
+    <string name="title_remove_task">Remove task</string>
+    <string name="title_remove_task_question">Do you want to remove this task?</string>
+
+    <string name="msg_todo_updated_success">The note was updated successfully.</string>
+    <string name="msg_todo_save_success">The note was saved successfully.</string>
+    <string name="msg_todo_remove_success">The note was removed successfully</string>
 </resources>

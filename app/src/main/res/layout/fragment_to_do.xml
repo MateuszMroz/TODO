@@ -32,7 +32,7 @@
                 android:layout_marginStart="@dimen/normal_100"
                 android:layout_marginTop="@dimen/normal_100"
                 android:layout_marginEnd="@dimen/normal_100"
-                android:hint="@string/title"
+                android:hint="@string/hint_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -54,7 +54,7 @@
                 android:layout_marginStart="@dimen/normal_100"
                 android:layout_marginTop="@dimen/normal_100"
                 android:layout_marginEnd="@dimen/normal_100"
-                android:hint="@string/description"
+                android:hint="@string/hint_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_til">
@@ -81,7 +81,7 @@
                 android:layout_marginStart="@dimen/normal_100"
                 android:layout_marginTop="@dimen/normal_100"
                 android:layout_marginEnd="@dimen/normal_100"
-                android:hint="@string/picture_url"
+                android:hint="@string/hint_picture_url"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description_til">
@@ -90,7 +90,7 @@
                     android:id="@+id/picture_url_tied"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@={viewModel.pictureUrl}" />
@@ -107,7 +107,7 @@
                 android:layout_marginBottom="@dimen/normal_100"
                 android:enabled="@{!TextUtils.isEmpty(viewModel.title) &amp;&amp; !TextUtils.isEmpty(viewModel.description)}"
                 android:onClick="@{() -> viewModel.saveToDo()}"
-                android:text="@string/save"
+                android:text="@string/action_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
