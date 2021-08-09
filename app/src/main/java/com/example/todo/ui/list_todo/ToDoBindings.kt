@@ -16,11 +16,11 @@ fun setImage(imageView: ImageView, imageUrl: String?) {
             crossfade(true)
             transformations(CircleCropTransformation())
             listener(onError = { _, _ ->
-                imageView.load(R.drawable.todo_icon)
+                imageView.load(R.drawable.book_logo)
             })
         }
     } else {
-        imageView.load(R.drawable.todo_icon)
+        imageView.load(R.drawable.book_logo)
     }
 }
 

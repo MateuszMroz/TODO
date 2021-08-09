@@ -34,7 +34,7 @@
             android:layout_marginEnd="@dimen/normal_100"
             android:layout_marginBottom="@dimen/normal_100"
             android:clickable="true"
-            android:contentDescription="@string/new_todo"
+            android:contentDescription="@string/desc_new_todo"
             android:focusable="true"
             android:onClick="@{() -> viewModel.addNewToDo()}"
             android:src="@drawable/ic_baseline_add"

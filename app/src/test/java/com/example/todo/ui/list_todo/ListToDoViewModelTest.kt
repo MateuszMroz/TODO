@@ -73,7 +73,7 @@ class ListToDoViewModelTest : BaseUnitTest() {
         listToDoViewModel.onRemoveTask(todo1.id)
 
         val successMsg: Event<Int> = listToDoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.note_removed_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_remove_success))
     }
 
     @Test
@@ -82,7 +82,6 @@ class ListToDoViewModelTest : BaseUnitTest() {
 
         listToDoViewModel = ListToDoViewModel(todoFakeRepository)
 
-        listToDoViewModel = ListToDoViewModel(todoFakeRepository)
         listToDoViewModel.onRemoveTask(todo1.id)
 
         val errorMsg: Event<String?> = listToDoViewModel.errorMsg.getOrAwaitValue()

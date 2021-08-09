@@ -17,23 +17,27 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/item_todo_height"
         android:onClick="@{() -> viewModel.editToDo(item.id)}"
         android:onLongClick="@{() -> viewModel.removeToDo(item.id)}"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="@dimen/corner_25"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
-        app:contentPadding="8dp">
+        app:contentPadding="@dimen/normal_50">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/avatar_iv"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="8dp"
-                android:contentDescription="@string/todo_avatar"
+                android:layout_width="@dimen/item_todo_picture_size"
+                android:layout_height="@dimen/item_todo_picture_size"
+                android:layout_marginStart="@dimen/normal_50"
+                android:layout_marginTop="@dimen/normal_50"
+                android:layout_marginBottom="@dimen/normal_50"
+                android:contentDescription="@string/desc_todo_avatar"
                 app:imageUrl="@{item.pictureUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,25 +47,33 @@
                 android:id="@+id/title_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/normal_50"
+                android:layout_marginTop="@dimen/normal_50"
                 android:layout_marginEnd="@dimen/normal_50"
+                android:maxLines="2"
                 android:text="@{item.title}"
+                android:textSize="@dimen/text_125"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/avatar_iv"
-                app:layout_constraintTop_toTopOf="@+id/avatar_iv"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Title" />
 
             <TextView
                 android:id="@+id/description_tv"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/normal_50"
-                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_50"
+                android:layout_marginTop="@dimen/normal_100"
+                android:layout_marginEnd="@dimen/normal_50"
+                android:layout_marginBottom="@dimen/normal_50"
+                android:minLines="4"
                 android:text="@{item.description}"
                 app:layout_constraintBottom_toTopOf="@+id/timestamp_tv"
-                app:layout_constraintEnd_toEndOf="@+id/title_tv"
-                app:layout_constraintStart_toStartOf="@+id/title_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/avatar_iv"
                 app:layout_constraintTop_toBottomOf="@+id/title_tv"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="Description" />
 
             <TextView
@@ -69,7 +81,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/normal_50"
-                app:layout_constraintBottom_toBottomOf="@+id/avatar_iv"
+                android:layout_marginBottom="@dimen/normal_50"
+                android:ellipsize="none"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/description_tv"

@@ -9,6 +9,7 @@ import com.example.todo.util.ToDoMapper
 import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.After
@@ -41,6 +42,24 @@ class ToDoViewModelTest : BaseUnitTest() {
     }
 
     @Test
+    fun `is open edit todo state`() {
+        todoViewModel = ToDoViewModel(todoFakeRepository, mapper, todo1.id)
+
+        assertThat(todoViewModel.title.getOrAwaitValue(), `is`(todo1.title))
+        assertThat(todoViewModel.description.getOrAwaitValue(), `is`(todo1.description))
+        assertThat(todoViewModel.pictureUrl.getOrAwaitValue(), `is`(todo1.pictureUrl))
+    }
+
+    @Test
+    fun `is open add new todo state`() {
+        todoViewModel = ToDoViewModel(todoFakeRepository, mapper, null)
+
+        assertThat(todoViewModel.title.value, nullValue())
+        assertThat(todoViewModel.description.value, nullValue())
+        assertThat(todoViewModel.pictureUrl.value, nullValue())
+    }
+
+    @Test
     fun `save new todo success`() = runBlockingTest {
         todoViewModel = ToDoViewModel(todoFakeRepository, mapper, null)
 
@@ -51,7 +70,7 @@ class ToDoViewModelTest : BaseUnitTest() {
         todoViewModel.saveToDo()
 
         val successMsg: Event<Int> = todoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.todo_save_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_save_success))
     }
 
     @Test
@@ -103,7 +122,7 @@ class ToDoViewModelTest : BaseUnitTest() {
         todoViewModel.saveToDo()
 
         val successMsg: Event<Int> = todoViewModel.successMsg.getOrAwaitValue()
-        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.todo_updated_success))
+        assertThat(successMsg.getContentIfNotHandled(), `is`(R.string.msg_todo_updated_success))
     }
 
     @Test

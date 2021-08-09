@@ -54,14 +54,13 @@ class ListToDoViewModel @Inject constructor(private val repository: IToDoReposit
         return true
     }
 
-    suspend fun onRemoveTask(id: String) {
+    fun onRemoveTask(id: String) {
         viewModelScope.launch {
             isLoading.value = true
             val result = repository.removeToDo(id)
             if (result.isSuccess) {
                 isLoading.value = false
-                setSuccessMsg(R.string.note_removed_success)
-                onRefresh()
+                setSuccessMsg(R.string.msg_todo_remove_success)
             } else {
                 isLoading.value = false
                 setErrorMsg(result.exceptionOrNull()?.message)

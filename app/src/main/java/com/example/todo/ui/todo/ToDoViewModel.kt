@@ -73,7 +73,7 @@ class ToDoViewModel @AssistedInject constructor(
                 val result = repository.updateToDo(it)
                 if (result.isSuccess) {
                     isLoading.value = false
-                    setSuccessMsg(R.string.todo_updated_success)
+                    setSuccessMsg(R.string.msg_todo_updated_success)
                 } else {
                     isLoading.value = false
                     setErrorMsg(result.exceptionOrNull()?.message)
@@ -96,7 +96,7 @@ class ToDoViewModel @AssistedInject constructor(
 
             if (result.isSuccess) {
                 isLoading.value = false
-                setSuccessMsg(R.string.todo_save_success)
+                setSuccessMsg(R.string.msg_todo_save_success)
             } else {
                 isLoading.value = false
                 setErrorMsg(result.exceptionOrNull()?.message)

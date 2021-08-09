@@ -51,18 +51,11 @@ class MainCoroutineScopeRule(val dispatcher: TestCoroutineDispatcher = TestCorou
     TestCoroutineScope by TestCoroutineScope(dispatcher) {
     override fun starting(description: Description?) {
         super.starting(description)
-        // If your codebase allows the injection of other dispatchers like
-        // Dispatchers.Default and Dispatchers.IO, consider injecting all of them here
-        // and renaming this class to `CoroutineScopeRule`
-        //
-        // All injected dispatchers in a test should point to a single instance of
-        // TestCoroutineDispatcher.
         Dispatchers.setMain(dispatcher)
     }
 
     override fun finished(description: Description?) {
         super.finished(description)
-        advanceUntilIdle()
         cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
